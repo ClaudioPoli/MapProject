@@ -100,7 +100,7 @@ public class TableData {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
         ResultSet r = s.executeQuery("SELECT DISTINCT " + column.getColumnName() +
-                                     "FROM " + table);
+                                     " FROM " + table);
         Set<Object> set = new TreeSet<>();
         while(r.next())
             set.add(r.getString(column.getColumnName()));
@@ -110,7 +110,7 @@ public class TableData {
 
     /**
      * <p>Formula ed esegue una interrogazione SQL che consiste in una proiezione 
-     * sulla colonna {@code column} della tabella {@code table} del database, per 
+     * sulla colonna {@code column} della tabella {@code table} nel database, per 
      * estrarre il valore aggregato (il minimo o il massimo) di tipo {@code QUERY_TYPE}.
      * @param table nome della tabella nel database.
      * @param column nome dell'attributo ossia titolo della colonna nella tabella.
@@ -124,7 +124,7 @@ public class TableData {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
         ResultSet r = s.executeQuery("SELECT " + aggregate + "(" + column + ")" +
-                                     "FROM " + table);
+                                     " FROM " + table);
         Object value;
         if(r.next())
             value = r.getDouble(column.getColumnName());
