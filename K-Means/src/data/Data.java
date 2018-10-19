@@ -27,9 +27,7 @@ import database.TableData;
 import database.TableSchema;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+        
 /**
  * <p>Questa classe modella l'insieme delle transazioni come tuple di una tabella.
  * @author Andrea Mercanti
@@ -155,14 +153,15 @@ public class Data {
 
         /*Si definiscono gli elementi di explanatorySet, ognuno dei quali viene modellato 
         su necessità da un oggetto della classe DiscreteAttribute o ContinuousAttribute*/
+        int i = 0;
         for (TableSchema.Column column : table_schema) {
-            int i = 0;
             if (column.isNumber()) {
                 double min_value = (double) dataFromDB.getAggregateColumnValue(table, column, QUERY_TYPE.MIN);
                 double max_value = (double) dataFromDB.getAggregateColumnValue(table, column, QUERY_TYPE.MAX);
                 explanatorySet.add(new ContinuousAttribute(column.getColumnName(), i, min_value, max_value));
             } else {
-                TreeSet<String> values = new TreeSet<String>(dataFromDB.getDistinctColumnValues(table, column));
+                TreeSet<Object> object_values = (TreeSet<Object>) dataFromDB.getDistinctColumnValues(table, column);
+                TreeSet<String> values = (TreeSet<String>) object_values.clone();
                 explanatorySet.add(new DiscreteAttribute(column.getColumnName(), i, values));
             }
             i++;
@@ -202,9 +201,9 @@ public class Data {
     }
 
     /**
-     * <p>Restituisce il valore dell'attributo in posizione attributeIndex nella 
-     * exampleIndex-esima tupla, o più intuitivamente il valore dell'elemento della
-     * matrice in posizione [exampleIndex, attributeIndex].
+     * <p>Restituisce il valore dell'attributo in posizione {@code attributeIndex} nella 
+     * {@code exampleIndex}-esima tupla, o più intuitivamente il valore dell'elemento 
+     * in posizione [exampleIndex, attributeIndex] della matrice.
      * @param exampleIndex numero ordinale della riga della tabella.
      * @param attributeIndex indice identificante l'attributo in tabella.
      * @return l'oggetto in posizione [exampleIndex, attributeIndex] nella tabella.

@@ -91,21 +91,21 @@ public class TableData {
      * estrarne i valori distinti e restituirli all'interno di un insieme ordinato
      * ascendentemente.
      * @param table nome della tabella nel database.
-     * @param column nome dell'attributo ossia titolo della colonna in tabella.
+     * @param column nome dell'attributo ossia il titolo della colonna in tabella.
      * @return l'insieme dei valori distinti ordinati in modo ascendente per 
      *         l'attributo {@code column} nella tabella {@code table}.
      * @throws SQLException in presenza di errori nella esecuzione della query.
      */
-    public  Set<Object> getDistinctColumnValues(String table, Column column) throws SQLException, DatabaseConnectionException {
+    public Set<Object> getDistinctColumnValues(String table, Column column) throws SQLException, DatabaseConnectionException {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
         ResultSet r = s.executeQuery("SELECT DISTINCT " + column.getColumnName() +
                                      " FROM " + table);
-        Set<Object> set = new TreeSet<>();
+        Set<Object> distinct_values = new TreeSet<>();
         while(r.next())
-            set.add(r.getString(column.getColumnName()));
+            distinct_values.add(r.getString(column.getColumnName()));
         s.close();
-        return set;
+        return distinct_values;
     }
 
     /**
@@ -123,11 +123,11 @@ public class TableData {
     public  Object getAggregateColumnValue(String table, Column column, QUERY_TYPE aggregate) throws SQLException, NoValueException, DatabaseConnectionException {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
-        ResultSet r = s.executeQuery("SELECT " + aggregate + "(" + column + ")" +
+        ResultSet r = s.executeQuery("SELECT " + aggregate + "(" + column.getColumnName() + ")" +
                                      " FROM " + table);
         Object value;
         if(r.next())
-            value = r.getDouble(column.getColumnName());
+            value = r.getDouble(aggregate + "(" + column.getColumnName() + ")");
         else
             throw new NoValueException();
         s.close();

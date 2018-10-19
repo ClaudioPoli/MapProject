@@ -1,9 +1,3 @@
-package data;
-
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-
 /*
  * Copyright (C) 2018 Andrea Mercanti 
  *
@@ -21,6 +15,12 @@ import java.util.TreeSet;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package data;
+
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
 /**
  * <p>Modella un attributo di tipo categorico quindi discreto in un certo dominio.
  * @author Andrea Mercanti
@@ -30,7 +30,7 @@ public class DiscreteAttribute extends Attribute implements Iterable<String>{
     private TreeSet<String> values;
     
     /**
-     * <p>Inizializza i valori descriventi l'attributo con i valori {@code name}, 
+     * <p>Inizializza le features descriventi l'attributo con i valori {@code name}, 
      * {@code index} e {@code values}, quest'ultimo rappresentante il dominio, 
      * passati come parametri.
      * @param name nome simbolico dell'attributo.
