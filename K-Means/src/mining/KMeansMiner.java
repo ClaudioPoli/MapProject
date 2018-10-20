@@ -120,4 +120,14 @@ public class KMeansMiner {
         outStream.writeObject(C);
         outStream.close();
     }
+
+    /**
+     * <p>Restituisce la stringa che rappresenta lo stato dell'oggetto cioè
+     * l'insieme dei centroidi dei cluster da cui è formato l'oggetto.
+     * @return la stringa che rappresenta i centroidi di ciascun cluster.
+     */
+    @Override
+    public String toString() {
+        return C.toString();
+    }
 }

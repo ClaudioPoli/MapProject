@@ -77,8 +77,12 @@ public class TableData {
         
         while (r.next()) {
             example = new Example();
-            for (Column column : tableSchema)
-                example.add(r.getString(column.getColumnName())); //popolamento della tupla
+            for (Column column : tableSchema) {
+                if(column.isNumber())
+                    example.add(new Double(r.getString(column.getColumnName()))); //popolamento della tupla
+                else
+                    example.add(r.getString(column.getColumnName())); //popolamento della tupla
+            }
             examples.add(example);
         }
         s.close();
