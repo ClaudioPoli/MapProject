@@ -27,9 +27,7 @@ import database.TableData;
 import database.TableSchema;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+        
 /**
  * <p>Questa classe modella l'insieme delle transazioni come tuple di una tabella.
  * @author Andrea Mercanti
@@ -114,7 +112,7 @@ public class Data {
 //        }
 //    }
     
-    /**Tabella o insieme delle transazioni.*/
+    /**Tabella o insieme delle transazioni, modellata come sequenza ordinata di oggetti {@code Example}.*/
     @SuppressWarnings("FieldMayBeFinal")
     private ArrayList<Example> data;
     /**Numero di tuple cioè di righe della tabella.*/
@@ -155,14 +153,15 @@ public class Data {
 
         /*Si definiscono gli elementi di explanatorySet, ognuno dei quali viene modellato 
         su necessità da un oggetto della classe DiscreteAttribute o ContinuousAttribute*/
+        int i = 0;
         for (TableSchema.Column column : table_schema) {
-            int i = 0;
             if (column.isNumber()) {
                 double min_value = (double) dataFromDB.getAggregateColumnValue(table, column, QUERY_TYPE.MIN);
                 double max_value = (double) dataFromDB.getAggregateColumnValue(table, column, QUERY_TYPE.MAX);
                 explanatorySet.add(new ContinuousAttribute(column.getColumnName(), i, min_value, max_value));
             } else {
-                TreeSet<String> values = new TreeSet<String>(dataFromDB.getDistinctColumnValues(table, column));
+                TreeSet<Object> object_values = (TreeSet<Object>) dataFromDB.getDistinctColumnValues(table, column);
+                TreeSet<String> values = (TreeSet<String>) object_values.clone();
                 explanatorySet.add(new DiscreteAttribute(column.getColumnName(), i, values));
             }
             i++;
@@ -202,9 +201,9 @@ public class Data {
     }
 
     /**
-     * <p>Restituisce il valore dell'attributo in posizione attributeIndex nella 
-     * exampleIndex-esima tupla, o più intuitivamente il valore dell'elemento della
-     * matrice in posizione [exampleIndex, attributeIndex].
+     * <p>Restituisce il valore dell'attributo in posizione {@code attributeIndex} nella 
+     * {@code exampleIndex}-esima tupla, o più intuitivamente il valore dell'elemento 
+     * in posizione [exampleIndex, attributeIndex] della matrice.
      * @param exampleIndex numero ordinale della riga della tabella.
      * @param attributeIndex indice identificante l'attributo in tabella.
      * @return l'oggetto in posizione [exampleIndex, attributeIndex] nella tabella.
@@ -252,7 +251,7 @@ public class Data {
     }
 
     /**
-     * <p>Metodo principale per l'esecuzione dell'applicazione.
+     * <p>Metodo principale per l'esecuzione del file Data.java.
      * @param args insieme dei valori per parametrizzare il comportamento dell'applicazione;
      */
     public static void main(String args[]){
@@ -266,8 +265,8 @@ public class Data {
     }
     
     /**
-     * <p>Crea una tupla che modella, come sequenza di coppie Attributo-valore, 
-     * la i-esima riga in data.
+     * <p>Crea una tupla che modella, come sequenza di coppie attributo-valore, 
+     * la i-esima riga nella tabella locale {@code data}.
      * @param index indice di riga.
      * @return la tupla in posizione index in tabella.
      */
@@ -276,7 +275,7 @@ public class Data {
         Attribute attribute = null;
         Tuple tuple = new Tuple(size);
         for(int j = 0; j < size; j++) { //scanning each attribute
-            attribute = explanatorySet.get(j);  //fetch the j-th element in coloumn
+            attribute = explanatorySet.get(j);  //fetch the j-th attribute or coloumn
             if (attribute instanceof DiscreteAttribute)
                 tuple.add(new DiscreteItem((DiscreteAttribute)attribute, (String)data.get(index).get(j)), j);
             else
@@ -299,13 +298,13 @@ public class Data {
         //choose k random different centroids in data.
         Random rand = new Random();
         rand.setSeed(System.currentTimeMillis());
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < k; i++) {   //for each centroid
             boolean found;
             int c;
             do {
                 found = false;
                 c = rand.nextInt(getNumberOfExamples());
-                //verify that c-th raw is not equal to a centroide already stored in CentroidIndexes
+                //verify that the c-th raw is not equal to a centroide already stored in CentroidIndexes
                 for(int j = 0; j < i; j++) {
                     if(compare(centroidIndexes[j],c)){
                         found = true;

@@ -99,7 +99,7 @@ public class MainTest {
                         KMeansMiner kmeans = new KMeansMiner(k);
                         try {
                             int numIter = kmeans.kmeans(data);
-                            System.out.println("Numero di Iterazione: " + numIter);
+                            System.out.println("Numero di Iterazioni: " + numIter);
                             System.out.println(kmeans.getC().toString(data));
                             System.out.print("Nome file di backup: ");
                             String fileName = Keyboard.readString() + ".dmp";

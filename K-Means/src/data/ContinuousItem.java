@@ -24,8 +24,9 @@ package data;
  */
 public class ContinuousItem extends Item{
     /**
-     * <p>Iniziallizza i valori dei membri attributi.
-     * @param attribute tipo di attributo continuo.
+     * <p>Costruisce l'item di tipo ocontinuo, iniziallizzando i valori dei 
+     * membri attributi con quelli passati in input.
+     * @param attribute tipo di attributo (continuo).
      * @param value valore che assume l'item tra quelli nel dominio dell'attributo.
      */
     public ContinuousItem(Attribute attribute, Object value) {

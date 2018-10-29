@@ -77,8 +77,12 @@ public class TableData {
         
         while (r.next()) {
             example = new Example();
-            for (Column column : tableSchema)
-                example.add(r.getString(column.getColumnName())); //popolamento della tupla
+            for (Column column : tableSchema) {
+                if(column.isNumber())
+                    example.add(new Double(r.getString(column.getColumnName()))); //popolamento della tupla
+                else
+                    example.add(r.getString(column.getColumnName())); //popolamento della tupla
+            }
             examples.add(example);
         }
         s.close();
@@ -91,26 +95,26 @@ public class TableData {
      * estrarne i valori distinti e restituirli all'interno di un insieme ordinato
      * ascendentemente.
      * @param table nome della tabella nel database.
-     * @param column nome dell'attributo ossia titolo della colonna in tabella.
+     * @param column nome dell'attributo ossia il titolo della colonna in tabella.
      * @return l'insieme dei valori distinti ordinati in modo ascendente per 
      *         l'attributo {@code column} nella tabella {@code table}.
      * @throws SQLException in presenza di errori nella esecuzione della query.
      */
-    public  Set<Object> getDistinctColumnValues(String table, Column column) throws SQLException, DatabaseConnectionException {
+    public Set<Object> getDistinctColumnValues(String table, Column column) throws SQLException, DatabaseConnectionException {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
         ResultSet r = s.executeQuery("SELECT DISTINCT " + column.getColumnName() +
-                                     "FROM " + table);
-        Set<Object> set = new TreeSet<>();
+                                     " FROM " + table);
+        Set<Object> distinct_values = new TreeSet<>();
         while(r.next())
-            set.add(r.getString(column.getColumnName()));
+            distinct_values.add(r.getString(column.getColumnName()));
         s.close();
-        return set;
+        return distinct_values;
     }
 
     /**
      * <p>Formula ed esegue una interrogazione SQL che consiste in una proiezione 
-     * sulla colonna {@code column} della tabella {@code table} del database, per 
+     * sulla colonna {@code column} della tabella {@code table} nel database, per 
      * estrarre il valore aggregato (il minimo o il massimo) di tipo {@code QUERY_TYPE}.
      * @param table nome della tabella nel database.
      * @param column nome dell'attributo ossia titolo della colonna nella tabella.
@@ -123,11 +127,11 @@ public class TableData {
     public  Object getAggregateColumnValue(String table, Column column, QUERY_TYPE aggregate) throws SQLException, NoValueException, DatabaseConnectionException {
         Connection c = db.getConnection();
         Statement s = c.createStatement();
-        ResultSet r = s.executeQuery("SELECT " + aggregate + "(" + column + ")" +
-                                     "FROM " + table);
+        ResultSet r = s.executeQuery("SELECT " + aggregate + "(" + column.getColumnName() + ")" +
+                                     " FROM " + table);
         Object value;
         if(r.next())
-            value = r.getDouble(column.getColumnName());
+            value = r.getDouble(aggregate + "(" + column.getColumnName() + ")");
         else
             throw new NoValueException();
         s.close();

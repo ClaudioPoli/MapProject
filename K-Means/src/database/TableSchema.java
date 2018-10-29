@@ -70,7 +70,7 @@ public class TableSchema implements Iterable<TableSchema.Column>{
         }
 
         /**
-         * <p>Verifica se la colonna o l'attributo puntato da {@code this} è di tipo
+         * <p>Verifica se la colonna ovvero l'attributo puntato da {@code this} è di tipo
          * numerico o meno.
          * @return {@code true} se il dominio è di tipo numerico, {@code false} 
          * se è di tipo litterale.

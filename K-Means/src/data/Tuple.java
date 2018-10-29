@@ -1,12 +1,3 @@
-package data;
-
-
-import data.Data;
-import data.Item;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Set;
-
 /*
  * Copyright (C) 2018 Andrea Mercanti 
  *
@@ -23,6 +14,14 @@ import java.util.Set;
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package data;
+
+import data.Data;
+import data.Item;
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * <p>Modella il generico concetto di tupla come sequenza di coppie attributo-valore
@@ -71,7 +70,7 @@ public class Tuple implements Serializable{
     }
     
     /**
-     * <p>Determina la distanza tra la tupla riferita da obj e la tupla corrente;
+     * <p>Determina la distanza tra la tupla riferita da {@code obj} e la tupla corrente;
      * la distanza è ottenuta come la somma delle distanze tra gli item in 
      * posizioni eguali nelle due tuple.
      * @param obj tupla a cui riferirsi.
@@ -101,8 +100,4 @@ public class Tuple implements Serializable{
         avg = sumD/clusteredData.size();
         return avg;
     }
-    
-    
-    
-    
 }
