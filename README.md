@@ -1,2 +1,2 @@
 # MAP-Project
-This is for my university class project
+Advanced Programming Methods Project
